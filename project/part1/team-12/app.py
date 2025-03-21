@@ -1,9 +1,14 @@
 import sqlite3
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
-# Database connection function
+# route to flowers.html
+@app.route('/')
+def home():
+    return render_template('flowers.html')
+
+# db connection function
 def get_db_connection():
     cx = sqlite3.connect("team12_flowers.db")
     cx.row_factory = sqlite3.Row  # enables name-based access to columns
@@ -14,7 +19,7 @@ def get_db_connection():
 def get_flowers():
     cx = get_db_connection()
     cur = cx.cursor()
-    cur.execute("SELECT id, name, last_watered, water_level, min_water_required FROM team12_flowers;")
+    cur.execute("SELECT id, name, last_watered, water_level, min_water_required, image_url FROM team12_flowers;")
     flowers = cur.fetchall()
     cur.close()
     cx.close()
@@ -25,7 +30,8 @@ def get_flowers():
         "name": flower["name"],
         "last_watered": flower["last_watered"],
         "water_level": flower["water_level"],
-        "needs_watering": flower["water_level"] < flower["min_water_required"]
+        "needs_watering": flower["water_level"] < flower["min_water_required"],
+        "image_url": flower["image_url"]
     } for flower in flowers])
 
 # gets flowers that need watering
@@ -43,7 +49,8 @@ def get_flowers_needing_water():
         "name": flower["name"],
         "last_watered": flower["last_watered"],
         "water_level": flower["water_level"],
-        "needs_watering": True 
+        "needs_watering": True,
+        "img_url": flower["img_url"]
     } for flower in flowers])
 
 # adds a flower

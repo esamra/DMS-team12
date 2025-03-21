@@ -11,6 +11,7 @@
             <th>Last Watered</th>
             <th>Water Level</th>
             <th>Needs Watering</th>
+            <th>Picture</th>
         </tr>
         <tbody id="flower-data"></tbody>
     </table>
@@ -26,6 +27,7 @@
                         <td>${flower.last_watered}</td>
                         <td>${flower.water_level} inches</td>
                         <td>${flower.needs_watering ? "Yes" : "No"}</td>
+                        <td><img src="${flower.image_url}" width="100"></td>
                     </tr>`;
                 });
                 document.getElementById("flower-data").innerHTML = rows;
