@@ -2,6 +2,26 @@
 <html lang="en">
 <head>
     <title>Flower Watering Status</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+        .needs-water {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <h2>Flower Watering Status</h2>
@@ -22,12 +42,13 @@
             .then(data => {
                 let rows = "";
                 data.forEach(flower => {
+                    let needsWateringClass = flower.needs_watering ? "needs-water" : "";
                     rows += `<tr>
                         <td>${flower.name}</td>
                         <td>${flower.last_watered}</td>
                         <td>${flower.water_level} inches</td>
-                        <td>${flower.needs_watering ? "Yes" : "No"}</td>
-                        <td><img src="${flower.image_url}" width="100"></td>
+                        <td class="${needsWateringClass}">${flower.needs_watering ? "Yes" : "No"}</td>
+                        <td><img src="${flower.image_url}" onerror="this.onerror=null; this.src='/static/images/default.jpg';"></td>
                     </tr>`;
                 });
                 document.getElementById("flower-data").innerHTML = rows;
