@@ -1,0 +1,2 @@
+UPDATE team12_flowers
+SET water_level = water_level - (5 * (CURRENT_DATE - last_watered));
