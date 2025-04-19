@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Flower Watering Status</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+        .needs-water {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Flower Watering Status</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Last Watered</th>
+            <th>Water Level</th>
+            <th>Needs Watering</th>
+            <th>Picture</th>
+        </tr>
+        <tbody id="flower-data"></tbody>
+    </table>
+
+    <!-- 🌱 Query Performance Buttons Section -->
+    <hr>
+    <h3>Performance Test</h3>
+    <button onclick="runQuery('slow')">Run Slow Query</button>
+    <button onclick="runQuery('fast')">Run Fast Query</button>
+
+    <pre id="query-result" style="margin-top: 10px; background: #f0f0f0; padding: 10px;"></pre>
+
+    <!-- 🧠 Scripts -->
+    <script>
+        // Display flower data
+        fetch('/flowers')
+            .then(response => response.json())
+            .then(data => {
+                let rows = "";
+                data.forEach(flower => {
+                    let needsWateringClass = flower.needs_watering ? "needs-water" : "";
+                    rows += `<tr>
+                        <td>${flower.name}</td>
+                        <td>${flower.last_watered}</td>
+                        <td>${flower.water_level} inches</td>
+                        <td class="${needsWateringClass}">${flower.needs_watering ? "Yes" : "No"}</td>
+                        <td><img src="${flower.image_url}" onerror="this.onerror=null; this.src='/static/images/default.jpg';"></td>
+                    </tr>`;
+                });
+                document.getElementById("flower-data").innerHTML = rows;
+            });
+
+        // Handle Slow/Fast Query
+        function runQuery(type) {
+            fetch(`/${type}-query`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("query-result").textContent = 
+                        `Query:\n${data.query}\n\nExecution Time: ${data.execution_time} ms`;
+                });
+        }
+    </script>
+</body>
+</html>
