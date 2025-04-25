@@ -1,0 +1,42 @@
+# Team 12 Flower App Setup Instructions
+
+1. Create the virtual environment
+python3 -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+
+2. Install required Python pckages:
+pip install -r requirements.txt
+
+3. Set up the SQLite database (for flower routes):
+sqlite3 team12_flowers.db
+
+Then run the following SQL in the SQLite shell:
+
+CREATE TABLE team12_flowers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    last_watered TEXT,
+    water_level REAL,
+    min_water_required REAL,
+    image_url TEXT
+);
+
+.exit
+
+4. Set up PostgreSQL database (for performance test routes):
+- Ensure PostgreSQL is installed and running
+- Log into psql: `psql -U postgres`
+- Create the database:
+
+CREATE DATABASE team12_db;
+\q
+
+- Run the setup script:
+
+psql -U postgres -d team12_db -f templates/setupTeam12.sql
+
+6. Run the Flask app:
+python app.py
+
+Then go to:
+- http://localhost:5000 → homepage
